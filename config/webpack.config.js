@@ -652,7 +652,8 @@ module.exports = function (webpackEnv) {
       //   can be used to reconstruct the HTML if necessary
       new ManifestPlugin({
         fileName: 'asset-manifest.json',
-        publicPath: paths.publicUrlOrPath,
+        //修改了这，多加了.slice(0, -1)
+        publicPath: paths.publicUrlOrPath.slice(0, -1),
         generate: (seed, files, entrypoints) => {
           const manifestFiles = files.reduce((manifest, file) => {
             manifest[file.name] = file.path;

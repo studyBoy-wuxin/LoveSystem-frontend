@@ -1,60 +1,50 @@
-import React, {Component} from 'react';
-import LinkIteration from '../Router/LinkIteration'
+import React, {FC, useState} from 'react';
+import LinkIteration from '../../component/Router/LinkIteration'
 import {MyRouter} from '../../API/RouteIndex'
-import {Avatar, Divider, Layout} from 'antd';
+import {Avatar, Layout} from 'antd';
 import './index.css'
 import AppBreadcrumb from "../AppBreadcrumb/AppBreadcrumb";
 import { UserOutlined } from '@ant-design/icons';
-import {SiderTheme} from "antd/es/layout/Sider";
+import {RouteComponentProps, withRouter} from 'react-router-dom'
 const { Header, Content, Footer, Sider } = Layout;
 
+interface IProps extends RouteComponentProps{children?:any }
 
-interface IState{
-    collapsed:boolean,
-    theme?:SiderTheme
-}
-class AppLayout extends Component<any,IState> {
+const AppLayout:FC<IProps> = (props:IProps)=>{
+    const [collapsed,setCollapsed] = useState(false)
 
-    state = {
-        collapsed: false,
-        theme:'light' as SiderTheme
-    };
+    const onCollapse = (newCollapsed:boolean) =>  setCollapsed(newCollapsed)
 
-    onCollapse = (collapsed:boolean) =>  this.setState({ collapsed })
+    return (
+        <>
+            <Layout className='components-AppLayout' style={{ minHeight: '100vh' }}>
 
-    render() {
-        const {collapsed,theme} = this.state
-        return (
-            <>
-                <Layout className='components-AppLayout' style={{ minHeight: '100vh' }}>
+                <Sider collapsible collapsed={collapsed} onCollapse={onCollapse}>
+                    <div className="logo" />
+                    {/*放置路由链接信息*/}
+                    <LinkIteration routeInfo={MyRouter} theme={'dark'}/>
+                </Sider>
 
-                    <Sider collapsible collapsed={collapsed} onCollapse={this.onCollapse} theme={theme}>
-                        <div className="logo" />
-                        <Divider/>
-                        {/*放置路由链接信息*/}
-                        <LinkIteration routeInfo={MyRouter} theme={theme}/>
-                    </Sider>
+                <Layout className="site-layout">
+                    <Header className="site-layout-background" style={{ padding: 0 }} >
+                        <div className='site-layout-Avatar'>
+                            <Avatar size={50} icon={<UserOutlined/>} />
+                            <span>欢迎您,邹泽世</span>
+                        </div>
+                    </Header>
 
-                    <Layout className="site-layout">
-                        <Header className="site-layout-background" style={{backgroundColor:theme==='light'?'#ffffff':' #001529' }} >
-                            <div className='site-layout-Avatar'>
-                                <Avatar size={50} icon={<UserOutlined/>} />
-                                <span style={{color:theme==='light'?'black':'white'}}>欢迎您,邹泽世</span>
-                            </div>
-                        </Header>
+                    <Content style={{ margin: '16px 16px'}}>
+                        <AppBreadcrumb />
+                        {/*children中存放的是Route路由信息*/}
+                        {props.children}
+                    </Content>
 
-                        <Content style={{ margin: '16px 16px'}}>
-                            <AppBreadcrumb />
-                            {/*children中存放的是Route路由信息*/}
-                            {this.props.children}
-                        </Content>
-
-                        <Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer>
-                    </Layout>
+                    <Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer>
                 </Layout>
-            </>
-        );
-    }
+            </Layout>
+        </>
+    )
 }
 
-export default AppLayout;
+
+export default withRouter(AppLayout);

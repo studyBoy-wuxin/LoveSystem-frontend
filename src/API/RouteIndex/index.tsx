@@ -1,8 +1,7 @@
 import {ReactNode,lazy} from "react";
 import {
     DesktopOutlined,
-    PieChartOutlined,
-    FileOutlined
+    PieChartOutlined
 } from '@ant-design/icons';
 const PageNotFound = lazy(()=>import('../../Pages/PageNotFound/PageNotFound'));
 const AppUser = lazy(()=>import('../../Pages/UserControl'))
@@ -16,35 +15,11 @@ export interface IRouter{
     exact?:boolean,
     component?:ReactNode,
     icon?:ReactNode,
-    children ?:IRouter[]
+    children ?:IRouter[],
+    IsLink?:boolean             //是否展示路由链接
 }
 
 export const MyRouter:IRouter[] = [
-    {
-        key:'/AppUser',
-        path:'/AppUser',
-        title:'AppUser',
-        component:<AppUser/>,
-        icon:<DesktopOutlined/>
-    },
-    {
-        key:'/a',
-        path:'/a',
-        title:'a',
-        component:<Test/>,
-        icon:<PieChartOutlined/>,
-    },
-    {
-        //路由匹配规则是从上往下，如果遇到路径找不到，那么就404
-        key:'/PageNotFound',
-        path:'/PageNotFound',
-        title:'PageNotFound',
-        component:<PageNotFound/>,
-        icon:<FileOutlined/>
-    }
-]
-
-export const OtherRouter:IRouter[] = [
     {
         key:'/login',
         path:'/login',
@@ -54,5 +29,44 @@ export const OtherRouter:IRouter[] = [
         key:'/register',
         path:'/register',
         component:<Register/>,
+    },
+    {
+        key:'/PageNotFound',
+        path:'/PageNotFound',
+        component:<PageNotFound/>,
+    },
+    {
+        key:'/admin',
+        path:'/admin',
+        title:'admin',
+        IsLink:false,
+        children:[
+            {
+                key:'/admin/AppUser',
+                path:'/admin/AppUser',
+                title:'AppUser',
+                component:<AppUser/>,
+                IsLink:true,
+                icon:<DesktopOutlined/>,
+            },
+            {
+                key:'/admin/Test',
+                path:'/admin/Test',
+                title:'Test',
+                component:<Test/>,
+                IsLink:true,
+                children:[
+                    {
+                        key:'/admin/Test/AppUser',
+                        path:'/admin/Test/AppUser',
+                        title:'AppUser',
+                        component:<AppUser/>,
+                        IsLink:true,
+                        icon:<DesktopOutlined/>,
+                    },
+                ],
+                icon:<PieChartOutlined/>,
+            },
+        ]
     },
 ]
