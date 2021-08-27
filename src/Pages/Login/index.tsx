@@ -8,25 +8,53 @@ import {
     WeiboCircleOutlined,
 } from '@ant-design/icons';
 import {message, Tabs, Space} from 'antd';
-import { useState } from 'react';
+import {FC, useEffect, useState} from 'react';
 import './index.less'
 import logo from '../../assets/Image/logo.svg'
 import { WaterMark } from '@ant-design/pro-layout';
 
-
 type LoginType = 'phone' | 'account';
-const Login = () => {
+interface IProps{}
+const Login:FC<IProps> = () => {
     const [loginType, setLoginType] = useState<LoginType>('account');
+    const [day, setDay] = useState(0);
+    const [hour, setHour] = useState('');
+    const [minute, setMinute] = useState('');
+    const [second, setSecond] = useState('');
+
+    useEffect(() => {
+        const count = ()=>{
+            const begin = new Date('2020-10-26 17:00:00')
+            const now = new Date()
+            const time = now.getTime() - begin.getTime()
+            const d = Math.floor(time/(1000*60*60*24))
+            setDay(d)
+            const h =Math.floor ((time - d*(1000*60*60*24))/(1000*60*60))
+            //如果是一位数，还要加个0
+            setHour(h.toString().length === 1? ('0'+h) : (''+h))
+            const m = Math.floor((((time - d*(1000*60*60*24))-h*(1000*60*60)))/(1000*60))
+            setMinute(m.toString().length === 1? ('0'+m) : (''+m))
+            const s = Math.floor((((time - d*(1000*60*60*24))-h*(1000*60*60)-m*(1000*60)))/(1000))
+            setSecond(s.toString().length === 1? ('0'+s) : (''+s))
+        }
+        const Interval = setInterval(()=> count(),1000)
+        return () => clearInterval(Interval)
+    }, []);
+
+
     return (
-        <WaterMark content={"I L❤ve you"}>
+        <WaterMark
+            content={"I L❤ve you"}
+            fontSize={25}
+        >
             <div className={"login-container"}>
                 <div className={'top'}>
                     <div className='header'>
                         <img className={'logo'} src={logo} alt={'logo'}/>
-                        <span className={'title'}>Ant Design</span>
+                        <span className={'title'}>LoveSystem</span>
                     </div>
                     <div className={'desc'}>
-                        Ant Design 是西湖区最具影响力的 Web 设计规范
+                        这是包子和橘妹相爱的第{day}天 {hour}小时 {minute}分钟 {second}秒
                     </div>
                 </div>
                 <LoginForm

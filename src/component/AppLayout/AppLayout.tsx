@@ -1,11 +1,12 @@
-import React, {FC, useState} from 'react';
+import React, {FC, useEffect, useState} from 'react';
 import LinkIteration from '../../component/Router/LinkIteration'
 import {MyRouter} from '../../API/RouteIndex'
-import {Avatar, Layout} from 'antd';
+import {Avatar, Layout, message} from 'antd';
 import './index.css'
 import AppBreadcrumb from "../AppBreadcrumb/AppBreadcrumb";
 import { UserOutlined } from '@ant-design/icons';
 import {RouteComponentProps, withRouter} from 'react-router-dom'
+import storageUtils from "../../util/storageUtil";
 const { Header, Content, Footer, Sider } = Layout;
 
 interface IProps extends RouteComponentProps{children?:any }
@@ -15,6 +16,14 @@ const AppLayout:FC<IProps> = (props:IProps)=>{
 
     const onCollapse = (newCollapsed:boolean) =>  setCollapsed(newCollapsed)
 
+    useEffect(()=>{
+        const user = storageUtils.getUser()
+        if(!user.token){
+            //并不处在login页面而且storage中没有token
+            message.error("用户尚未登录")
+            props.history.push("/login")
+        }
+    })
     return (
         <>
             <Layout className='components-AppLayout' style={{ minHeight: '100vh' }}>

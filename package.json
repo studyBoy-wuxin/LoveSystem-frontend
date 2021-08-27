@@ -107,6 +107,7 @@
   "devDependencies": {
     "@types/react-highlight-words": "^0.16.3",
     "@types/store": "^2.0.2",
+    "cnpm": "^7.0.0",
     "less": "^3.9.0",
     "less-loader": "^5.0.0",
     "storejs": "^1.1.0"

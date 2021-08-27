@@ -27,22 +27,35 @@ const RouterIteration:FC<IProps> = (props:IProps)=>{
             if(item.children){
                 //如果父路由的不需要Link，但是子路由又需要Link，那么就是需要把子路由用AppLayout包裹
                 if(!item.IsLink && item.children.some((item)=> item.IsLink===true)){
-                    return (
-                        <Fragment key={item.key}>
-                            <AppLayout>
-                                {arroundWithSwitch( fn(item.children))}
-                            </AppLayout>
-                        </Fragment>
-                    )
+                    if(!item.component){
+                        return (
+                            <Fragment key={item.key}>
+                                <AppLayout>
+                                    {arroundWithSwitch( fn(item.children))}
+                                </AppLayout>
+                            </Fragment>
+                        )
+                    }else{
+                        return (
+                            <Fragment key={item.key}>
+                                <Route path={item.path} exact={item.exact}>
+                                    {item.component}
+                                    <AppLayout>
+                                        {arroundWithSwitch( fn(item.children))}
+                                    </AppLayout>
+                                </Route>
+                            </Fragment>
+                        )
+                    }
                 }else if(item.IsLink && item.children.some((item)=> item.IsLink===true)){
                     //如果需要路由标签的，而且子路由也需要的，还有component组件的，就把组件渲染出来，再把子路由传进去
                     if(item.component){
                         return (
                             <Fragment key={item.key}>
-                                <Route key={item.path} path={item.path} exact={item.exact}>
+                                <Route path={item.path} exact={item.exact}>
                                     {item.component}
+                                    {arroundWithSwitch( fn(item.children))}
                                 </Route>
-                                {arroundWithSwitch( fn(item.children))}
                             </Fragment>
                         )
                     }else{
@@ -67,8 +80,8 @@ const RouterIteration:FC<IProps> = (props:IProps)=>{
         //使用Switch包裹，匹配到第一个符合的路由就会停止
         <Switch>
             {fn(props.routeInfo)}
-            {console.log(fn(props.routeInfo))}
             <Redirect to='/login'/>
+            {/*<Redirect from={"localhost:3000"} to={"/admin"} />*/}
         </Switch>
     )
 }
