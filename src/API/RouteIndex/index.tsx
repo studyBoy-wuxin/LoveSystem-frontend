@@ -8,7 +8,6 @@ const AppUser = lazy(()=>import('../../Pages/UserControl'))
 const Test = lazy(()=>import('../../Pages/test'));
 const Login = lazy(()=>import('../../Pages/Login'))
 const Register = lazy(()=>import('../../Pages/Register'))
-const AppLayout = lazy(()=>import('../../component/AppLayout/AppLayout'))
 export interface IRouter{
     key:string,
     path:string,
@@ -21,11 +20,6 @@ export interface IRouter{
 }
 
 export const MyRouter:IRouter[] = [
-    {
-        key:'/',
-        path:'/',
-        component:<AppLayout/>,
-    },
     {
         key:'/login',
         path:'/login',

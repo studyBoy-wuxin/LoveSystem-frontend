@@ -40,10 +40,10 @@ const RouterIteration:FC<IProps> = (props:IProps)=>{
                             <Fragment key={item.key}>
                                 <Route path={item.path} exact={item.exact}>
                                     {item.component}
-                                    <AppLayout>
-                                        {arroundWithSwitch( fn(item.children))}
-                                    </AppLayout>
                                 </Route>
+                                <AppLayout>
+                                    {arroundWithSwitch( fn(item.children))}
+                                </AppLayout>
                             </Fragment>
                         )
                     }
@@ -54,8 +54,8 @@ const RouterIteration:FC<IProps> = (props:IProps)=>{
                             <Fragment key={item.key}>
                                 <Route path={item.path} exact={item.exact}>
                                     {item.component}
-                                    {arroundWithSwitch( fn(item.children))}
                                 </Route>
+                                {arroundWithSwitch( fn(item.children))}
                             </Fragment>
                         )
                     }else{
@@ -80,7 +80,7 @@ const RouterIteration:FC<IProps> = (props:IProps)=>{
         //使用Switch包裹，匹配到第一个符合的路由就会停止
         <Switch>
             {fn(props.routeInfo)}
-            <Redirect to='/login'/>
+            <Redirect to='/admin'/>
             {/*<Redirect from={"localhost:3000"} to={"/admin"} />*/}
         </Switch>
     )
